@@ -34,6 +34,38 @@
   <!-- =============== -->
   <script type="text/javascript">
     // your JS code goes here
+
+    // TODO MODEL
+    var app = {}; // create namespace
+
+    app.Todo = Backbone.Model.extend({  // class Todo extends backbone model. could also use: var Todo = Backbone.Model.extend({});
+      defaults: {
+        title: '',
+        completed: false
+      }
+    });
+    var todo = new app.Todo({title: 'Learn Backbone.js', completed: false}); // Instantiate the todo model
+    todo.set('created_at', Date()); // Set time created to date object 
+
+    //Collection: ordered set of models 
+
+    app.TodoList = Backbone.Collection.extend({
+      model: app.Todo,
+      localStorage: new Store("backbone-todo")
+    });
+
+    // instance of the Collection
+    app.todoList = new app.TodoList();
+
+    var todoList = new app.TodoList()
+    todoList.create({title: 'Learn Backbone\'s Collection'}); // notice: that `completed` will be set to false by default.
+    var lmodel = new app.Todo({title: 'Learn Models', completed: true});
+    todoList.add(lmodel);
+    todoList.pluck('title');     // ["Learn Backbone's Collection", "Learn Models"]
+    todoList.pluck('completed'); // [false, true]
+    JSON.stringify(todoList);    // "[{"title":"Learn Backbone's Collection","completed":false,"id":"d9763e99-2267-75f5-62c3-9d7e40742aa6"},{"title":"Learn Models","completed":true}]"
+
+
   </script>
   
 </body>
