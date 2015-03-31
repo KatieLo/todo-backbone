@@ -20,6 +20,14 @@
     </section>
   </section>
 
+ <!-- template --> 
+  <script type="text/template" id="item-template">
+      <div class="view">
+        <input class="toggle" type="checkbox">
+        <label><%- title %></label>
+      </div>
+    </script>
+
 
   <!-- ========= -->
   <!-- Libraries -->
@@ -54,6 +62,10 @@
       localStorage: new Store("backbone-todo")
     });
 
+    //--------------
+    // Collections
+    //--------------
+
     // instance of the Collection
     app.todoList = new app.TodoList();
 
@@ -64,6 +76,22 @@
     todoList.pluck('title');     // ["Learn Backbone's Collection", "Learn Models"]
     todoList.pluck('completed'); // [false, true]
     JSON.stringify(todoList);    // "[{"title":"Learn Backbone's Collection","completed":false,"id":"d9763e99-2267-75f5-62c3-9d7e40742aa6"},{"title":"Learn Models","completed":true}]"
+
+    //--------------
+    // Views
+    //--------------
+
+    // renders individual todo items list (li)
+    app.TodoView = Backbone.View.extend({
+      tagName: 'li', // el will be wrapped in <li></li>
+      template: _.template($('#item-template').html()),
+      render: function(){
+        this.$el.html(this.template(this.model.toJSON()));
+        return this; // enable chained calls
+      }
+    });
+
+    var view = new app.TodoView({model: todo});
 
 
   </script>
